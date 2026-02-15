@@ -102,19 +102,17 @@
 </div>
 
 <script>
-    let tempCache = null;
+    // Penampung data mentah untuk nama/nik di riwayat
+    let rawCache = { tg: "01", nama: "-", nik: "-" };
 
-    // Fungsi Gabungan untuk Auto Expand dan Auto Reset
     function handleInput(el) {
-        // Auto Expand Tinggi Textarea
         el.style.height = "auto";
         el.style.height = (el.scrollHeight) + "px";
 
-        // Fitur Baru: Jika input kosong, hapus tampilan output
         if (el.value.trim() === "") {
             document.getElementById('out1').innerText = "";
             document.getElementById('out2').innerText = "";
-            tempCache = null;
+            rawCache = { tg: "01", nama: "-", nik: "-" };
         }
     }
 
@@ -186,30 +184,38 @@
         let kpjShort = (kpj !== "-" && kpj.length >= 4) ? kpj.substring(0, 4).toUpperCase() : kpj;
         let labelKartu = (kartuRaw !== "" && parseInt(kartuRaw) > 0) ? "SENSOR" : "TUNGGAL";
 
+        // Simpan data identitas saja
+        rawCache = { tg: noTG, nama, nik };
+
         const f1 = `🦆🦢 TG ${noTG} 🦢🦆\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikShort}\n${kpjShort}\n${nama}\n${thn}\nPT. -\n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${labelKartu}\n\nDPT ✅   JMO ✅`;
-        const f2 = `🦢🦆 TG ${noTG} 🦆\n\nNama: ${nama}\nNIK: ${nik}\nNo. KPJ: ${kpj}\nEmail: \nPassword: Bebek123@ \n\n🖥 Admin OTP : 087778889609`;
+        const f2 = `🦢🦆 TG ${noTG} 🦆🦢\n\nNama: ${nama}\nNIK: ${nik}\nNo. KPJ: ${kpj}\nEmail: \nPassword: Bebek123@ \n\n🖥 Admin OTP : 087778889609`;
 
         document.getElementById('out1').innerText = f1;
         document.getElementById('out2').innerText = f2;
 
-        tempCache = { tg: noTG, nama, nik, kpj, f1: f1, f2: f2 };
         btn.style.background = "#28a745";
         btn.innerHTML = "Success! ✨";
         setTimeout(() => { btn.style.background = "var(--primary)"; btn.innerHTML = "Generate ✨"; }, 1000);
     }
 
+    // FUNGSI SEND WA DENGAN FITUR SAVE HASIL EDITAN
     function sendWA(id, directText = null) {
-        let text = directText || document.getElementById(id).innerText;
-        if(!text || text.trim() === "") return;
-        if(tempCache && !directText) {
-            saveHistory(tempCache.tg, tempCache.nama, tempCache.nik, tempCache.f1, tempCache.f2);
-            tempCache = null; 
+        let textToSend = directText || document.getElementById(id).innerText;
+        if(!textToSend || textToSend.trim() === "") return;
+
+        // Jika bukan kirim ulang dari riwayat (artinya tombol Send WA utama diklik)
+        if (!directText) {
+            const currentF1 = document.getElementById('out1').innerText;
+            const currentF2 = document.getElementById('out2').innerText;
+            saveHistory(rawCache.tg, rawCache.nama, rawCache.nik, currentF1, currentF2);
         }
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+
+        window.open(`https://wa.me/?text=${encodeURIComponent(textToSend)}`, '_blank');
     }
 
     function saveHistory(tg, nama, nik, f1, f2) {
         let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
+        // Simpan snapshot teks yang ada di kotak saat tombol WA diklik
         history.unshift({tg, nama, nik, f1, f2, timestamp: new Date().getTime()});
         localStorage.setItem('jmo_history', JSON.stringify(history.slice(0, 50)));
         renderHistory();
@@ -219,7 +225,7 @@
         const list = document.getElementById('historyList');
         const searchTerm = document.getElementById('searchHistory').value.toLowerCase();
         let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
-        let filtered = history.filter(item => item.nama.toLowerCase().includes(searchTerm) || item.nik.includes(searchTerm));
+        let filtered = history.filter(item => (item.nama && item.nama.toLowerCase().includes(searchTerm)) || (item.nik && item.nik.includes(searchTerm)));
         if (filtered.length === 0) { list.innerHTML = "<p style='text-align:center; color:#888; font-size:12px;'>Kosong.</p>"; return; }
         list.innerHTML = filtered.map((item, index) => `
             <div class="history-item">
@@ -228,8 +234,8 @@
                     <span class="time-ago">${timeAgo(item.timestamp)} ▼</span>
                 </div>
                 <div id="his-content-${index}" class="history-content">
-                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f1.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`)">Resend Format 1 🟢</button>
-                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f2.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`)">Resend Format 2 🟢</button>
+                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f1.replace(/`/g, '\\`').replace(/\n/g, '\\n').replace(/\r/g, '')}\`)">Resend Format 1 🟢</button>
+                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f2.replace(/`/g, '\\`').replace(/\n/g, '\\n').replace(/\r/g, '')}\`)">Resend Format 2 🟢</button>
                     <pre>${item.f1}</pre>
                     <pre style="background: #fdfdfd; color: #333; border: 1px solid #ddd;">${item.f2}</pre>
                 </div>
@@ -248,5 +254,4 @@
     setInterval(renderHistory, 60000);
 </script>
 </body>
-    </html>
-    
+</html>
