@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JMO Generator</title>
+    <title>JMO Generator Pro</title>
     
     <link rel="manifest" href="manifest.json">
     <script>
@@ -23,7 +23,7 @@
         }
 
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 15px; display: flex; justify-content: center; margin: 0; }
-        .container { background: var(--card); width: 100%; max-width: 450px; border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); box-sizing: border-box; margin-top: 10px; }
+        .container { background: var(--card); width: 100%; max-width: 450px; border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); box-sizing: border-box; margin-top: 10px; margin-bottom: 20px; }
         
         h2 { text-align: center; margin-top: 0; font-size: 1.2rem; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
         
@@ -48,21 +48,29 @@
         .out-dark { background: var(--dark-box); color: var(--neon); font-family: 'Consolas', monospace; }
         .out-light { background: #fdfdfd; color: #333; border: 1px solid #ddd; }
 
-        /* History Section */
-        .history-title { margin-top: 40px; border-top: 2px dashed #ccc; padding-top: 20px; font-weight: bold; color: var(--primary); display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
-        #historyList { margin-top: 15px; margin-bottom: 30px; }
+        /* Container History */
+        .history-wrapper { 
+            margin-top: 30px; 
+            background: rgba(0,0,0,0.03); 
+            padding: 15px; 
+            border-radius: 15px; 
+            border: 1px solid #ddd;
+        }
+        @media (prefers-color-scheme: dark) { .history-wrapper { background: rgba(255,255,255,0.05); border: 1px solid #444; } }
+
+        .history-title { font-weight: bold; color: var(--primary); display: flex; justify-content: space-between; align-items: center; font-size: 14px; margin-bottom: 15px; }
         
-        .history-item { background: var(--card); border: 1px solid #ddd; border-radius: 12px; margin-bottom: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .history-header { background: #f8f9fa; padding: 12px 15px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; color: #333; }
-        @media (prefers-color-scheme: dark) { .history-header { background: #2d2d2d; color: #eee; border-bottom: 1px solid #444; } }
+        .history-item { background: var(--card); border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+        .history-header { background: #f8f9fa; padding: 12px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        @media (prefers-color-scheme: dark) { .history-header { background: #2d2d2d; color: #eee; } }
         
-        .history-content { display: none; padding: 15px; font-size: 13px; background: var(--card); border-top: 1px solid #eee; }
-        .history-content pre { background: #f4f4f4; padding: 10px; border-radius: 8px; font-size: 11px; white-space: pre-wrap; color: #333; margin: 10px 0; border: 1px solid #ddd; }
-        @media (prefers-color-scheme: dark) { .history-content pre { background: #1a1c23; color: #00ff41; border: 1px solid #444; } }
+        .history-content { display: none; padding: 12px; font-size: 12px; border-top: 1px solid #eee; }
+        .history-content pre { background: #f9f9f9; padding: 8px; border-radius: 5px; white-space: pre-wrap; margin: 10px 0; border: 1px solid #eee; font-size: 10px; color: #555; }
+        @media (prefers-color-scheme: dark) { .history-content pre { background: #1a1c23; color: #00ff41; border-color: #333; } }
 
         .btn-wa-small { width: 100%; border: none; padding: 8px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold; color: white; background: var(--success); margin-bottom: 5px; }
-        .btn-clear-all { background: #ff4d4d; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold; }
-        .badge-tg { background: var(--primary); color: white; padding: 2px 8px; border-radius: 5px; font-size: 11px; margin-right: 8px; }
+        .btn-clear-all { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 10px; cursor: pointer; }
+        .badge-tg { background: var(--primary); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-right: 5px; }
     </style>
 </head>
 <body>
@@ -71,11 +79,11 @@
     <h2>⚒️ JMO Generator Pro</h2>
     
     <div class="sync-field">
-        <span>KODE TG:</span>
+        <span>Kode (TG):</span>
         <input type="text" id="noTG" value="01">
     </div>
 
-    <textarea id="inputData" placeholder="Tempel data mentah di sini..." oninput="autoExpand(this)"></textarea>
+    <textarea id="inputData" placeholder="Tempel data mentah..." oninput="autoExpand(this)"></textarea>
     <button id="genBtn" class="btn-gen" onclick="generate()">Generate ✨</button>
 
     <div class="output-container">
@@ -88,11 +96,13 @@
         <div id="out2" class="editable-box out-light" contenteditable="true"></div>
     </div>
 
-    <div class="history-title">
-        <span>History</span>
-        <button class="btn-clear-all" onclick="clearHistory()">Delete</button>
+    <div class="history-wrapper">
+        <div class="history-title">
+            <span>RIWAYAT</span>
+            <button class="btn-clear-all" onclick="clearHistory()">Hapus</button>
+        </div>
+        <div id="historyList"></div>
     </div>
-    <div id="historyList"></div>
 </div>
 
 <script>
@@ -142,20 +152,22 @@
         document.getElementById('out1').innerText = f1;
         document.getElementById('out2').innerText = f2;
 
-        // Simpan full teks ke cache sementara
-        tempCache = { tg: noTG, nama, fullF1: f1, fullF2: f2 };
+        // PERBAIKAN: Pastikan f1 dan f2 masuk ke cache
+        tempCache = { tg: noTG, nama, nik, kpj, f1: f1, f2: f2 };
         
-        btn.classList.add('btn-success');
-        btn.innerHTML = "Berhasil! ✨";
-        setTimeout(() => { btn.classList.remove('btn-success'); btn.innerHTML = "Generate ✨"; }, 1000);
+        btn.innerHTML = "Success! ✨";
+        setTimeout(() => { btn.innerHTML = "Generate ✨"; }, 1000);
     }
 
-    function sendWA(id, customText = null) {
-        const text = customText || document.getElementById(id).innerText;
-        if(!text) return alert("Belum ada data!");
+    function sendWA(id, directText = null) {
+        let text = directText;
+        if(!text) text = document.getElementById(id).innerText;
+        
+        if(!text || text.trim() === "") return alert("Generate data dulu!");
 
-        if(tempCache && !customText) {
-            saveHistory(tempCache.tg, tempCache.nama, tempCache.fullF1, tempCache.fullF2);
+        // SIMPAN SAAT KLIK WA (Ambil dari cache generate)
+        if(tempCache && !directText) {
+            saveHistory(tempCache.tg, tempCache.nama, tempCache.f1, tempCache.f2);
             tempCache = null; 
         }
 
@@ -169,37 +181,37 @@
         renderHistory();
     }
 
-    function toggleHistory(index) {
-        const content = document.getElementById(`his-content-${index}`);
-        content.style.display = content.style.display === 'block' ? 'none' : 'block';
-    }
-
     function renderHistory() {
         const list = document.getElementById('historyList');
         let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
         
         if (history.length === 0) {
-            list.innerHTML = "<p style='text-align:center; color:#888; font-size:13px;'>Kosong.</p>";
+            list.innerHTML = "<p style='text-align:center; color:#888; font-size:12px;'>Belum ada riwayat.</p>";
             return;
         }
 
         list.innerHTML = history.map((item, index) => `
             <div class="history-item">
                 <div class="history-header" onclick="toggleHistory(${index})">
-                    <div><span class="badge-tg">TG ${item.tg}</span> ${item.nama.substring(0, 18)}..</div>
+                    <span><span class="badge-tg">TG ${item.tg}</span> ${item.nama.substring(0, 15)}</span>
                     <span>▼</span>
                 </div>
                 <div id="his-content-${index}" class="history-content">
-                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f1.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`)">Kirim Format 1 🟢</button>
-                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f2.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`)">Kirim Format 2 🟢</button>
+                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f1.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`)">Resend Format 1 🟢</button>
+                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f2.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`)">Resend Format 2 🟢</button>
+                    <div style="font-size: 10px; color: #888; margin-bottom: 5px;">Pratinjau Format 1:</div>
                     <pre>${item.f1}</pre>
-                    <small style="color:#999;">Data: ${item.date}</small>
                 </div>
             </div>
         `).join('');
     }
 
-    function clearHistory() { if(confirm("Hapus semua riwayat?")) { localStorage.removeItem('jmo_history'); renderHistory(); } }
+    function toggleHistory(index) {
+        const content = document.getElementById(`his-content-${index}`);
+        content.style.display = content.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function clearHistory() { if(confirm("Hapus semua?")) { localStorage.removeItem('jmo_history'); renderHistory(); } }
 
     renderHistory();
 </script>
