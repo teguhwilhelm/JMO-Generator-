@@ -102,7 +102,6 @@
 </div>
 
 <script>
-    // Penampung data mentah untuk nama/nik di riwayat
     let rawCache = { tg: "01", nama: "-", nik: "-" };
 
     function handleInput(el) {
@@ -184,7 +183,6 @@
         let kpjShort = (kpj !== "-" && kpj.length >= 4) ? kpj.substring(0, 4).toUpperCase() : kpj;
         let labelKartu = (kartuRaw !== "" && parseInt(kartuRaw) > 0) ? "SENSOR" : "TUNGGAL";
 
-        // Simpan data identitas saja
         rawCache = { tg: noTG, nama, nik };
 
         const f1 = `🦆🦢 TG ${noTG} 🦢🦆\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikShort}\n${kpjShort}\n${nama}\n${thn}\nPT. -\n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${labelKartu}\n\nDPT ✅   JMO ✅`;
@@ -198,12 +196,10 @@
         setTimeout(() => { btn.style.background = "var(--primary)"; btn.innerHTML = "Generate ✨"; }, 1000);
     }
 
-    // FUNGSI SEND WA DENGAN FITUR SAVE HASIL EDITAN
     function sendWA(id, directText = null) {
         let textToSend = directText || document.getElementById(id).innerText;
         if(!textToSend || textToSend.trim() === "") return;
 
-        // Jika bukan kirim ulang dari riwayat (artinya tombol Send WA utama diklik)
         if (!directText) {
             const currentF1 = document.getElementById('out1').innerText;
             const currentF2 = document.getElementById('out2').innerText;
@@ -213,10 +209,18 @@
         window.open(`https://wa.me/?text=${encodeURIComponent(textToSend)}`, '_blank');
     }
 
+    // FUNGSI PERBAIKAN: ANTI-DOBEL
     function saveHistory(tg, nama, nik, f1, f2) {
         let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
-        // Simpan snapshot teks yang ada di kotak saat tombol WA diklik
-        history.unshift({tg, nama, nik, f1, f2, timestamp: new Date().getTime()});
+        
+        // Cek jika baris paling atas (index 0) NIK-nya sama, maka update saja
+        if (history.length > 0 && history[0].nik === nik) {
+            history[0] = {tg, nama, nik, f1, f2, timestamp: new Date().getTime()};
+        } else {
+            // Jika beda orang, buat baris baru di atas
+            history.unshift({tg, nama, nik, f1, f2, timestamp: new Date().getTime()});
+        }
+        
         localStorage.setItem('jmo_history', JSON.stringify(history.slice(0, 50)));
         renderHistory();
     }
