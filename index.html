@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JMO Generator - Fixed Button</title>
+    <title>JMO Generator</title>
     
     <link rel="manifest" href="manifest.json">
     <script>
@@ -36,13 +36,13 @@
             background: var(--card); color: var(--text); margin-bottom: 15px; resize: none;
         }
 
-        .btn-gen { width: 100%; padding: 15px; border: none; border-radius: 12px; margin-bottom: 20px; cursor: pointer; font-weight: bold; color: white; background: var(--primary); text-transform: uppercase; transition: 0.3s; }
+        .btn-gen { width: 100%; padding: 15px; border: none; border-radius: 12px; margin-bottom: 20px; cursor: pointer; font-weight: bold; color: white; background: var(--primary); text-transform: uppercase; }
         .btn-success { background: #28a745 !important; }
 
         .output-container { margin-top: 15px; }
         .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .label { font-weight: bold; font-size: 11px; color: #888; text-transform: uppercase; }
-        .btn-wa { border: none; padding: 10px 18px; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: bold; color: white; background: var(--success); box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+        .btn-wa { border: none; padding: 10px 18px; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: bold; color: white; background: var(--success); }
 
         .editable-box { width: 100%; padding: 15px; border-radius: 12px; font-size: 13px; line-height: 1.5; border: 1px solid #444; min-height: 60px; white-space: pre-wrap; box-sizing: border-box; outline: none; }
         .out-dark { background: var(--dark-box); color: var(--neon); font-family: 'Consolas', monospace; }
@@ -53,12 +53,14 @@
         #historyList { margin-top: 15px; margin-bottom: 30px; }
         
         .history-item { background: var(--card); border: 1px solid #ddd; border-radius: 12px; margin-bottom: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .history-header { background: #f8f9fa; padding: 12px 15px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; color: #333; transition: 0.2s; }
+        .history-header { background: #f8f9fa; padding: 12px 15px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; color: #333; }
         @media (prefers-color-scheme: dark) { .history-header { background: #2d2d2d; color: #eee; border-bottom: 1px solid #444; } }
-        .history-header:hover { background: #e9ecef; }
         
-        .history-content { display: none; padding: 15px; font-size: 13px; line-height: 1.6; background: var(--card); }
-        .history-content b { color: var(--primary); }
+        .history-content { display: none; padding: 15px; font-size: 13px; background: var(--card); border-top: 1px solid #eee; }
+        .history-content pre { background: #f4f4f4; padding: 10px; border-radius: 8px; font-size: 11px; white-space: pre-wrap; color: #333; margin: 10px 0; border: 1px solid #ddd; }
+        @media (prefers-color-scheme: dark) { .history-content pre { background: #1a1c23; color: #00ff41; border: 1px solid #444; } }
+
+        .btn-wa-small { width: 100%; border: none; padding: 8px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold; color: white; background: var(--success); margin-bottom: 5px; }
         .btn-clear-all { background: #ff4d4d; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold; }
         .badge-tg { background: var(--primary); color: white; padding: 2px 8px; border-radius: 5px; font-size: 11px; margin-right: 8px; }
     </style>
@@ -77,24 +79,23 @@
     <button id="genBtn" class="btn-gen" onclick="generate()">Generate ✨</button>
 
     <div class="output-container">
-        <div class="label-row"><span class="label">Format 1 (Gelap)</span><button class="btn-wa" onclick="sendWA('out1')">Send WA 🟢</button></div>
+        <div class="label-row"><span class="label">Format 1</span><button class="btn-wa" onclick="sendWA('out1')">Send WA 🟢</button></div>
         <div id="out1" class="editable-box out-dark" contenteditable="true"></div>
     </div>
 
     <div class="output-container">
-        <div class="label-row"><span class="label">Format 2 (Terang)</span><button class="btn-wa" onclick="sendWA('out2')">Send WA 🟢</button></div>
+        <div class="label-row"><span class="label">Format 2</span><button class="btn-wa" onclick="sendWA('out2')">Send WA 🟢</button></div>
         <div id="out2" class="editable-box out-light" contenteditable="true"></div>
     </div>
 
     <div class="history-title">
-        <span>RIWAYAT PENGIRIMAN</span>
-        <button class="btn-clear-all" onclick="clearHistory()">Kosongkan</button>
+        <span>History</span>
+        <button class="btn-clear-all" onclick="clearHistory()">Delete</button>
     </div>
     <div id="historyList"></div>
 </div>
 
 <script>
-    // Data sementara untuk menampung hasil generate sebelum dikirim
     let tempCache = null;
 
     function autoExpand(el) {
@@ -113,7 +114,7 @@
         const noTG = document.getElementById('noTG').value || "01";
         const btn = document.getElementById('genBtn');
 
-        if (!input.trim()) return alert("Silakan tempel data terlebih dahulu!");
+        if (!input.trim()) return alert("Tempel data dulu!");
 
         let nama = "-", nik = "-", kpj = "-", thn = "-", kab = "-", kec = "-", kel = "-", lasik = "0", kartuRaw = "";
         const lines = input.split('\n');
@@ -135,50 +136,42 @@
         let statusKartu = (kartuRaw !== "" && parseInt(kartuRaw) > 0) ? "SENSOR" : "TUNGGAL";
         let nikPendek = (nik !== "-" && nik.length >= 4) ? nik.substring(0, 4) : nik;
 
-        // Tampilkan Preview
-        document.getElementById('out1').innerText = `🦆🦢 TG ${noTG} 🦢🦆\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikPendek}\n${nama}\n${thn}\nPT. -\n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${statusKartu}\n\nDPT ✅   JMO ✅`;
-        document.getElementById('out2').innerText = `🦢🦆 TG ${noTG} 🦆\n\nNama: ${nama}\nNIK: ${nik}\nNo. KPJ: ${kpj}\nEmail: \nPassword: Bebek123@ \n\n🖥 Admin OTP : 087778889609`;
+        const f1 = `🦆🦢 TG ${noTG} 🦢🦆\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikPendek}\n${nama}\n${thn}\nPT. -\n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${statusKartu}\n\nDPT ✅   JMO ✅`;
+        const f2 = `🦢🦆 TG ${noTG} 🦆\n\nNama: ${nama}\nNIK: ${nik}\nNo. KPJ: ${kpj}\nEmail: \nPassword: Bebek123@ \n\n🖥 Admin OTP : 087778889609`;
 
-        // Simpan data ke cache sementara (belum masuk history)
-        tempCache = { noTG, nama, nik, kpj };
+        document.getElementById('out1').innerText = f1;
+        document.getElementById('out2').innerText = f2;
+
+        // Simpan full teks ke cache sementara
+        tempCache = { tg: noTG, nama, fullF1: f1, fullF2: f2 };
         
         btn.classList.add('btn-success');
-        btn.innerHTML = "Berhasil Diolah ✨";
+        btn.innerHTML = "Berhasil! ✨";
         setTimeout(() => { btn.classList.remove('btn-success'); btn.innerHTML = "Generate ✨"; }, 1000);
     }
 
-    function sendWA(id) {
-        const text = document.getElementById(id).innerText;
-        if(!text) return alert("Generate data dulu!");
+    function sendWA(id, customText = null) {
+        const text = customText || document.getElementById(id).innerText;
+        if(!text) return alert("Belum ada data!");
 
-        // SIMPAN KE HISTORY HANYA SAAT KLIK WA
-        if(tempCache) {
-            saveHistory(tempCache.noTG, tempCache.nama, tempCache.nik, tempCache.kpj);
-            // Kosongkan cache setelah disimpan agar tidak duplikat jika klik tombol WA format 2
+        if(tempCache && !customText) {
+            saveHistory(tempCache.tg, tempCache.nama, tempCache.fullF1, tempCache.fullF2);
             tempCache = null; 
         }
 
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
-    function saveHistory(tg, nama, nik, kpj) {
+    function saveHistory(tg, nama, f1, f2) {
         let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
-        
-        // Tambahkan ke paling atas
-        history.unshift({tg, nama, nik, kpj, date: new Date().toLocaleString('id-ID')});
-        
-        // Simpan maksimal 50 data
+        history.unshift({tg, nama, f1, f2, date: new Date().toLocaleString('id-ID')});
         localStorage.setItem('jmo_history', JSON.stringify(history.slice(0, 50)));
         renderHistory();
     }
 
     function toggleHistory(index) {
         const content = document.getElementById(`his-content-${index}`);
-        const icon = document.getElementById(`his-icon-${index}`);
-        const isVisible = content.style.display === 'block';
-        
-        content.style.display = isVisible ? 'none' : 'block';
-        icon.innerText = isVisible ? '▼' : '▲';
+        content.style.display = content.style.display === 'block' ? 'none' : 'block';
     }
 
     function renderHistory() {
@@ -186,35 +179,28 @@
         let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
         
         if (history.length === 0) {
-            list.innerHTML = "<p style='text-align:center; color:#888; font-size:13px;'>Belum ada riwayat pengiriman.</p>";
+            list.innerHTML = "<p style='text-align:center; color:#888; font-size:13px;'>Kosong.</p>";
             return;
         }
 
         list.innerHTML = history.map((item, index) => `
             <div class="history-item">
                 <div class="history-header" onclick="toggleHistory(${index})">
-                    <div><span class="badge-tg">TG ${item.tg}</span> ${item.nama.substring(0, 20)}</div>
-                    <span id="his-icon-${index}">▼</span>
+                    <div><span class="badge-tg">TG ${item.tg}</span> ${item.nama.substring(0, 18)}..</div>
+                    <span>▼</span>
                 </div>
                 <div id="his-content-${index}" class="history-content">
-                    <b>Nama Lengkap:</b> ${item.nama}<br>
-                    <b>NIK:</b> ${item.nik}<br>
-                    <b>No. KPJ:</b> ${item.kpj}<br>
-                    <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
-                    <small style="color:#999;">Dikirim pada: ${item.date}</small>
+                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f1.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`)">Kirim Format 1 🟢</button>
+                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f2.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`)">Kirim Format 2 🟢</button>
+                    <pre>${item.f1}</pre>
+                    <small style="color:#999;">Data: ${item.date}</small>
                 </div>
             </div>
         `).join('');
     }
 
-    function clearHistory() { 
-        if(confirm("Hapus semua riwayat secara permanen?")) { 
-            localStorage.removeItem('jmo_history'); 
-            renderHistory(); 
-        } 
-    }
+    function clearHistory() { if(confirm("Hapus semua riwayat?")) { localStorage.removeItem('jmo_history'); renderHistory(); } }
 
-    // Load history saat aplikasi dibuka
     renderHistory();
 </script>
 </body>
