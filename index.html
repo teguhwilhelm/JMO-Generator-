@@ -14,13 +14,8 @@
 
     <style>
         :root { 
-            --primary: #007bff; 
-            --success: #25d366; 
-            --bg: #f0f2f5;
-            --card: #ffffff;
-            --text: #333;
-            --dark-box: #1a1c23; 
-            --neon: #00ff41; 
+            --primary: #007bff; --success: #25d366; --bg: #f0f2f5;
+            --card: #ffffff; --text: #333; --dark-box: #1a1c23; --neon: #00ff41; 
         }
 
         @media (prefers-color-scheme: dark) {
@@ -30,91 +25,81 @@
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 15px; display: flex; justify-content: center; margin: 0; }
         .container { background: var(--card); width: 100%; max-width: 450px; border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); box-sizing: border-box; margin-top: 10px; }
         
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 12px; cursor: pointer; background: #ddd; font-weight: bold; color: #555; }
-        .tab-btn.active { background: var(--primary); color: white; }
-
+        h2 { text-align: center; margin-top: 0; font-size: 1.2rem; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
+        
         .sync-field { margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight: bold; }
-        .sync-field input { padding: 8px; border-radius: 8px; border: 2px solid #ddd; width: 50px; text-align: center; background: var(--card); color: var(--primary); font-weight: bold; }
+        .sync-field input { padding: 8px; border-radius: 8px; border: 2px solid #ddd; width: 60px; text-align: center; background: var(--card); color: var(--primary); font-weight: bold; outline: none; }
 
         textarea { 
             width: 100%; min-height: 100px; border-radius: 12px; border: 2px solid #ddd; 
             padding: 12px; box-sizing: border-box; font-size: 14px; outline: none; 
-            background: var(--card); color: var(--text); margin-bottom: 15px;
+            background: var(--card); color: var(--text); margin-bottom: 15px; resize: none;
         }
 
-        .btn-gen { width: 100%; padding: 15px; border: none; border-radius: 12px; margin-bottom: 20px; cursor: pointer; font-weight: bold; color: white; background: var(--primary); text-transform: uppercase; }
+        .btn-gen { width: 100%; padding: 15px; border: none; border-radius: 12px; margin-bottom: 20px; cursor: pointer; font-weight: bold; color: white; background: var(--primary); text-transform: uppercase; transition: 0.3s; }
         .btn-success { background: #28a745 !important; }
 
         .output-container { margin-top: 15px; }
         .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .label { font-weight: bold; font-size: 11px; color: #888; }
-        
-        .btn-wa { border: none; padding: 8px 15px; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: bold; color: white; background: var(--success); }
+        .label { font-weight: bold; font-size: 11px; color: #888; text-transform: uppercase; }
+        .btn-wa { border: none; padding: 10px 18px; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: bold; color: white; background: var(--success); box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
 
-        .editable-box { width: 100%; padding: 15px; border-radius: 12px; font-size: 13px; line-height: 1.5; border: 1px solid #444; min-height: 60px; white-space: pre-wrap; box-sizing: border-box; }
+        .editable-box { width: 100%; padding: 15px; border-radius: 12px; font-size: 13px; line-height: 1.5; border: 1px solid #444; min-height: 60px; white-space: pre-wrap; box-sizing: border-box; outline: none; }
         .out-dark { background: var(--dark-box); color: var(--neon); font-family: 'Consolas', monospace; }
         .out-light { background: #fdfdfd; color: #333; border: 1px solid #ddd; }
 
-        #historySection { display: none; }
-        .history-item { background: var(--card); border: 1px solid #ddd; padding: 12px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid var(--primary); }
-        .history-item b { color: var(--primary); }
-        .btn-clear { width: 100%; padding: 12px; background: #dc3545; color: white; border: none; border-radius: 12px; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        /* History Section */
+        .history-title { margin-top: 40px; border-top: 2px dashed #ccc; padding-top: 20px; font-weight: bold; color: var(--primary); display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+        #historyList { margin-top: 15px; margin-bottom: 30px; }
+        
+        .history-item { background: var(--card); border: 1px solid #ddd; border-radius: 12px; margin-bottom: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .history-header { background: #f8f9fa; padding: 12px 15px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; color: #333; transition: 0.2s; }
+        @media (prefers-color-scheme: dark) { .history-header { background: #2d2d2d; color: #eee; border-bottom: 1px solid #444; } }
+        .history-header:hover { background: #e9ecef; }
+        
+        .history-content { display: none; padding: 15px; font-size: 13px; line-height: 1.6; background: var(--card); }
+        .history-content b { color: var(--primary); }
+        .btn-clear-all { background: #ff4d4d; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: bold; }
+        .badge-tg { background: var(--primary); color: white; padding: 2px 8px; border-radius: 5px; font-size: 11px; margin-right: 8px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 style="text-align:center; margin-top: 0;">⚒️ JMO Generator ⚒️</h2>
+    <h2>⚒️ JMO Generator Pro</h2>
     
-    <div class="tabs">
-        <button id="tabGen" class="tab-btn active" onclick="showTab('gen')">GENERATOR</button>
-        <button id="tabHis" class="tab-btn" onclick="showTab('his')">HISTORY</button>
+    <div class="sync-field">
+        <span>KODE TG:</span>
+        <input type="text" id="noTG" value="01">
     </div>
 
-    <div id="generatorSection">
-        <div class="sync-field">
-            <span>KODE TG:</span>
-            <input type="text" id="noTG" value="01">
-        </div>
-        <textarea id="inputData" placeholder="Tempel data mentah di sini..." oninput="autoExpand(this)"></textarea>
-        <button id="genBtn" class="btn-gen" onclick="generate()">Generate ✨</button>
+    <textarea id="inputData" placeholder="Tempel data mentah di sini..." oninput="autoExpand(this)"></textarea>
+    <button id="genBtn" class="btn-gen" onclick="generate()">Generate ✨</button>
 
-        <div class="output-container">
-            <div class="label-row">
-                <span class="label">Format 1</span>
-                <button class="btn-wa" onclick="sendWA('out1')">Send WA 🟢</button>
-            </div>
-            <div id="out1" class="editable-box out-dark" contenteditable="true"></div>
-        </div>
-
-        <div class="output-container" style="margin-bottom: 20px;">
-            <div class="label-row">
-                <span class="label">Format 2</span>
-                <button class="btn-wa" onclick="sendWA('out2')">Send WA 🟢</button>
-            </div>
-            <div id="out2" class="editable-box out-light" contenteditable="true"></div>
-        </div>
+    <div class="output-container">
+        <div class="label-row"><span class="label">Format 1 (Gelap)</span><button class="btn-wa" onclick="sendWA('out1')">Send WA 🟢</button></div>
+        <div id="out1" class="editable-box out-dark" contenteditable="true"></div>
     </div>
 
-    <div id="historySection">
-        <div id="historyList"></div>
-        <button class="btn-clear" onclick="clearHistory()">Hapus History 🗑️</button>
+    <div class="output-container">
+        <div class="label-row"><span class="label">Format 2 (Terang)</span><button class="btn-wa" onclick="sendWA('out2')">Send WA 🟢</button></div>
+        <div id="out2" class="editable-box out-light" contenteditable="true"></div>
     </div>
+
+    <div class="history-title">
+        <span>RIWAYAT PENGIRIMAN</span>
+        <button class="btn-clear-all" onclick="clearHistory()">Kosongkan</button>
+    </div>
+    <div id="historyList"></div>
 </div>
 
 <script>
+    // Data sementara untuk menampung hasil generate sebelum dikirim
+    let tempCache = null;
+
     function autoExpand(el) {
         el.style.height = "auto";
         el.style.height = (el.scrollHeight) + "px";
-    }
-
-    function showTab(type) {
-        document.getElementById('generatorSection').style.display = type === 'gen' ? 'block' : 'none';
-        document.getElementById('historySection').style.display = type === 'his' ? 'block' : 'none';
-        document.getElementById('tabGen').className = type === 'gen' ? 'tab-btn active' : 'tab-btn';
-        document.getElementById('tabHis').className = type === 'his' ? 'tab-btn active' : 'tab-btn';
-        if(type === 'his') renderHistory();
     }
 
     function formatTitik(val) {
@@ -128,7 +113,7 @@
         const noTG = document.getElementById('noTG').value || "01";
         const btn = document.getElementById('genBtn');
 
-        if (!input.trim()) return alert("Data kosong!");
+        if (!input.trim()) return alert("Silakan tempel data terlebih dahulu!");
 
         let nama = "-", nik = "-", kpj = "-", thn = "-", kab = "-", kec = "-", kel = "-", lasik = "0", kartuRaw = "";
         const lines = input.split('\n');
@@ -150,149 +135,87 @@
         let statusKartu = (kartuRaw !== "" && parseInt(kartuRaw) > 0) ? "SENSOR" : "TUNGGAL";
         let nikPendek = (nik !== "-" && nik.length >= 4) ? nik.substring(0, 4) : nik;
 
+        // Tampilkan Preview
         document.getElementById('out1').innerText = `🦆🦢 TG ${noTG} 🦢🦆\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikPendek}\n${nama}\n${thn}\nPT. -\n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${statusKartu}\n\nDPT ✅   JMO ✅`;
         document.getElementById('out2').innerText = `🦢🦆 TG ${noTG} 🦆\n\nNama: ${nama}\nNIK: ${nik}\nNo. KPJ: ${kpj}\nEmail: \nPassword: Bebek123@ \n\n🖥 Admin OTP : 087778889609`;
 
-        saveHistory(nama, nik, kpj);
+        // Simpan data ke cache sementara (belum masuk history)
+        tempCache = { noTG, nama, nik, kpj };
+        
         btn.classList.add('btn-success');
-        btn.innerHTML = "Success! ✅";
+        btn.innerHTML = "Berhasil Diolah ✨";
         setTimeout(() => { btn.classList.remove('btn-success'); btn.innerHTML = "Generate ✨"; }, 1000);
-    }
-
-    function saveHistory(nama, nik, kpj) {
-        let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
-        history.unshift({nama, nik, kpj, date: new Date().toLocaleString('id-ID')});
-        localStorage.setItem('jmo_history', JSON.stringify(history.slice(0, 50)));
-    }
-
-    function renderHistory() {
-        const list = document.getElementById('historyList');
-        let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
-        list.innerHTML = history.length ? history.map(item => `<div class="history-item"><b>${item.nama}</b><br>NIK: ${item.nik}<br><small>${item.date}</small></div>`).join('') : "<p style='text-align:center;'>Kosong.</p>";
-    }
-
-    function clearHistory() { if(confirm("Hapus semua?")) { localStorage.removeItem('jmo_history'); renderHistory(); } }
-
-    function sendWA(id) {
-        const text = document.getElementById(id).innerText;
-        if(text) window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-    }
-</script>
-</body>
-</html>
-        .out-light { background: #ffffff; color: #333; }
-        .btn-wa-small { background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h2 style="text-align:center; font-size: 1.1rem; margin-top:0;">⚒️ JMO Generator Update ⚒️</h2>
-    
-    <div class="sync-field">
-        <span>Kode (TG):</span>
-        <input type="text" id="noTG" value="01">
-    </div>
-
-    <textarea id="inputData" placeholder="Tempel data mentah di sini..." oninput="handleInput(this)"></textarea>
-    
-    <button id="genBtn" class="btn-gen" onclick="generate()">Generate ✨</button>
-
-    <div class="output-container">
-        <div class="label-row"><span class="label">Format 1</span><button class="btn-wa-small" onclick="sendWA('out1')">Send WA 🟢</button></div>
-        <div id="out1" class="editable-box out-dark" contenteditable="true"></div>
-    </div>
-
-    <div class="output-container">
-        <div class="label-row"><span class="label">Format 2</span><button class="btn-wa-small" onclick="sendWA('out2')">Send WA 🟢</button></div>
-        <div id="out2" class="editable-box out-light" contenteditable="true"></div>
-    </div>
-</div>
-
-<script>
-    function handleInput(el) {
-        el.style.height = "auto";
-        el.style.height = (el.scrollHeight) + "px";
-
-        if (el.value.trim() === "") {
-            document.getElementById('out1').innerText = "";
-            document.getElementById('out2').innerText = "";
-            const btn = document.getElementById('genBtn');
-            btn.classList.remove('btn-success');
-            btn.innerHTML = "Generate ✨";
-        }
-    }
-
-    function formatTitik(val) {
-        if(!val) return "0";
-        let num = val.replace(/\D/g, "");
-        return num ? num.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0";
-    }
-
-    function generate() {
-        const input = document.getElementById('inputData').value;
-        const noTG = document.getElementById('noTG').value || "";
-        const btn = document.getElementById('genBtn');
-
-        if (!input.trim()) return alert("Tempel data terlebih dahulu!");
-
-        let nama = "-", nik = "-", kpj = "-", thn = "-", kab = "-", kec = "-", kel = "-", lasik = "0", kartuRaw = "";
-
-        const lines = input.split('\n');
-
-        lines.forEach(line => {
-            let uLine = line.toUpperCase().trim();
-            let content = "";
-            
-            if (line.includes(":")) {
-                content = line.split(":")[1].trim();
-            } else {
-                content = line.split(/\t/ || / {2,}/).pop().trim();
-            }
-
-            if (uLine.includes("NAMA")) nama = content;
-            if (uLine.includes("NIK")) nik = content.replace(/\D/g, "");
-            if (uLine.includes("KPJ")) kpj = content.replace(/\D/g, "");
-            if (uLine.includes("KOTA") || uLine.includes("KABUPATEN")) kab = content;
-            if (uLine.includes("KECAMATAN")) kec = content;
-            if (uLine.includes("KELURAHAN")) kel = content;
-            if (uLine.includes("TTL")) {
-                let match = line.match(/\d{4}/);
-                if (match) thn = match[0];
-            }
-            if (uLine.includes("SALDO LASIK")) lasik = formatTitik(content);
-            if (uLine.includes("JUMLAH KARTU")) {
-                kartuRaw = content.replace(/\D/g, "");
-            }
-        });
-
-        let statusKartu = "TUNGGAL"; 
-        if (kartuRaw !== "" && parseInt(kartuRaw) > 0) {
-            statusKartu = "SENSOR";
-        }
-
-        let nikPendek = (nik !== "-" && nik.length >= 4) ? nik.substring(0, 4) : nik;
-
-        const f1 = `🦆🦢 TG ${noTG} 🦢🦆\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikPendek}\n${nama}\n${thn}\nPT. -\n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${statusKartu}\n\nDPT ✅   JMO ✅`;
-        const f2 = `🦢🦆 TG ${noTG} 🦆🦢\n\nNama: ${nama}\nNIK: ${nik}\nNo. KPJ: ${kpj}\nEmail: \nPassword: Bebek123@ \n\n🖥 Admin OTP : 087778889609`;
-
-        document.getElementById('out1').innerText = f1;
-        document.getElementById('out2').innerText = f2;
-
-        btn.classList.add('btn-success');
-        btn.innerHTML = "Success ✅";
-        setTimeout(() => {
-            btn.classList.remove('btn-success');
-            btn.innerHTML = "Generate ✨";
-        }, 800);
     }
 
     function sendWA(id) {
         const text = document.getElementById(id).innerText;
         if(!text) return alert("Generate data dulu!");
+
+        // SIMPAN KE HISTORY HANYA SAAT KLIK WA
+        if(tempCache) {
+            saveHistory(tempCache.noTG, tempCache.nama, tempCache.nik, tempCache.kpj);
+            // Kosongkan cache setelah disimpan agar tidak duplikat jika klik tombol WA format 2
+            tempCache = null; 
+        }
+
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
-</script>
 
+    function saveHistory(tg, nama, nik, kpj) {
+        let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
+        
+        // Tambahkan ke paling atas
+        history.unshift({tg, nama, nik, kpj, date: new Date().toLocaleString('id-ID')});
+        
+        // Simpan maksimal 50 data
+        localStorage.setItem('jmo_history', JSON.stringify(history.slice(0, 50)));
+        renderHistory();
+    }
+
+    function toggleHistory(index) {
+        const content = document.getElementById(`his-content-${index}`);
+        const icon = document.getElementById(`his-icon-${index}`);
+        const isVisible = content.style.display === 'block';
+        
+        content.style.display = isVisible ? 'none' : 'block';
+        icon.innerText = isVisible ? '▼' : '▲';
+    }
+
+    function renderHistory() {
+        const list = document.getElementById('historyList');
+        let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
+        
+        if (history.length === 0) {
+            list.innerHTML = "<p style='text-align:center; color:#888; font-size:13px;'>Belum ada riwayat pengiriman.</p>";
+            return;
+        }
+
+        list.innerHTML = history.map((item, index) => `
+            <div class="history-item">
+                <div class="history-header" onclick="toggleHistory(${index})">
+                    <div><span class="badge-tg">TG ${item.tg}</span> ${item.nama.substring(0, 20)}</div>
+                    <span id="his-icon-${index}">▼</span>
+                </div>
+                <div id="his-content-${index}" class="history-content">
+                    <b>Nama Lengkap:</b> ${item.nama}<br>
+                    <b>NIK:</b> ${item.nik}<br>
+                    <b>No. KPJ:</b> ${item.kpj}<br>
+                    <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
+                    <small style="color:#999;">Dikirim pada: ${item.date}</small>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function clearHistory() { 
+        if(confirm("Hapus semua riwayat secara permanen?")) { 
+            localStorage.removeItem('jmo_history'); 
+            renderHistory(); 
+        } 
+    }
+
+    // Load history saat aplikasi dibuka
+    renderHistory();
+</script>
 </body>
 </html>
