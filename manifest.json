@@ -1,15 +1,16 @@
 {
-  "name": "Santtuy Generator JMO",
-  "short_name": "SanttuyGen",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#38bdf8",
+  "short_name": "JMO Gen",
+  "name": "JMO Generator Update",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/281/281769.png",
+      "src": "https://toppng.com/uploads/preview/donald-duck-11550711275usrbxpld5f.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#007bff",
+  "background_color": "#ffffff"
 }
