@@ -6,6 +6,11 @@
     <title>JMO Generator Pro</title>
     <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#007bff">
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -14,6 +19,20 @@
         .catch(err => console.log('Gagal daftar Service Worker', err));
     });
   }
+
+  // --- KONFIGURASI FIREBASE ---
+  // Ganti dengan konfigurasi dari Firebase Console kamu
+  const firebaseConfig = {
+    apiKey: "AIzaSyAV5fZiGX-YygqUX0PZbkCbiQ-kt1b4HUw",
+    authDomain: "jmo-gen.firebaseapp.com",
+    databaseURL: "https://jmo-gen-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "jmo-gen",
+    storageBucket: "jmo-gen.firebasestorage.app",
+    messagingSenderId: "1035818626321",
+    appId: "1:1035818626321:web:241032832ee089462170b0"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 </script>
     
     <style>
@@ -28,6 +47,14 @@
 
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 10px; display: flex; flex-direction: column; align-items: center; margin: 0; }
         
+        /* --- CSS LOGIN AREA --- */
+        #auth-screen { width: 100%; max-width: 400px; margin-top: 60px; background: var(--card); padding: 30px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
+        .auth-input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box; background: var(--bg); color: var(--text); outline: none; }
+        .auth-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: var(--primary); color: white; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .auth-link { margin-top: 15px; font-size: 13px; color: var(--primary); cursor: pointer; }
+        .user-bar { width: 100%; max-width: 450px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 0 5px; font-size: 12px; font-weight: bold; }
+        .btn-off { background: #ff4757; color: white; border: none; padding: 4px 10px; border-radius: 5px; cursor: pointer; }
+
         .container, .history-wrapper { 
             background: var(--card); 
             width: 100%; 
@@ -103,51 +130,102 @@
 </head>
 <body>
 
-<div class="container">
-    <h2>⚒️ JMO Generator Pro ⚒️</h2>
-    <div class="sync-field">
-        <span>Kode (TG):</span>
-        <input type="text" id="noTG" value="01">
-    </div>
-    <textarea id="inputData" placeholder="Tempel Bahan di sini..." oninput="handleInput(this)"></textarea>
-    <button id="genBtn" class="btn-gen" onclick="generate()">Generate ✨</button>
-
-    <div class="output-container">
-        <div class="label-row">
-            <span class="label">Format 1</span>
-            <select id="selTemp" class="template-select" onchange="generate()">
-                <option value="ori">🦆 Template</option>
-                <option value="1">💎 Template</option>
-                <option value="2">✨ Template</option>
-                <option value="3">🪽 Template</option>
-            </select>
-            <button class="btn-wa" onclick="sendWA('out1')">Send WA 🟢</button>
-        </div>
-        <div id="out1" class="editable-box out-dark" contenteditable="true"></div>
-    </div>
-
-    <div class="output-container">
-        <div class="label-row"><span class="label">Format 2</span><button class="btn-wa" onclick="sendWA('out2')">Send WA 🟢</button></div>
-        <div id="out2" class="editable-box out-light" contenteditable="true"></div>
-    </div>
+<div id="auth-screen">
+    <h2 id="auth-title">Masuk JMO Pro</h2>
+    <input type="email" id="email" class="auth-input" placeholder="Email (Contoh: user@jmo.com)">
+    <input type="password" id="pass" class="auth-input" placeholder="Password">
+    <button class="auth-btn" id="main-auth-btn" onclick="handleAuth()">Login</button>
+    <p class="auth-link" onclick="toggleAuth()" id="toggle-text">Belum punya akun? Daftar gratis</p>
 </div>
 
-<div class="history-wrapper">
-    <div class="history-header-top">
-        <span style="font-weight:bold; color:var(--primary); font-size: 13px;">History</span>
-        <button class="btn-clear-all" onclick="clearHistory()">Delete</button>
+<div id="main-content" style="display: none; width: 100%; display: flex; flex-direction: column; align-items: center;">
+    <div class="user-bar">
+        <span id="user-display">User: -</span>
+        <button class="btn-off" onclick="logout()">Logout</button>
     </div>
-    <input type="text" id="searchHistory" class="search-box" placeholder="Cari Nama/NIK..." onkeyup="renderHistory()">
-    <div id="historyList"></div>
+
+    <div class="container">
+        <h2>⚒️ JMO Generator Pro ⚒️</h2>
+        <div class="sync-field">
+            <span>Kode (TG):</span>
+            <input type="text" id="noTG" value="01">
+        </div>
+        <textarea id="inputData" placeholder="Tempel Bahan di sini..." oninput="handleInput(this)"></textarea>
+        <button id="genBtn" class="btn-gen" onclick="generate()">Generate ✨</button>
+
+        <div class="output-container">
+            <div class="label-row">
+                <span class="label">Format 1</span>
+                <select id="selTemp" class="template-select" onchange="generate()">
+                    <option value="ori">🦆 Template</option>
+                    <option value="1">💎 Template</option>
+                    <option value="2">✨ Template</option>
+                    <option value="3">🪽 Template</option>
+                </select>
+                <button class="btn-wa" onclick="sendWA('out1')">Send WA 🟢</button>
+            </div>
+            <div id="out1" class="editable-box out-dark" contenteditable="true"></div>
+        </div>
+
+        <div class="output-container">
+            <div class="label-row"><span class="label">Format 2</span><button class="btn-wa" onclick="sendWA('out2')">Send WA 🟢</button></div>
+            <div id="out2" class="editable-box out-light" contenteditable="true"></div>
+        </div>
+    </div>
+
+    <div class="history-wrapper">
+        <div class="history-header-top">
+            <span style="font-weight:bold; color:var(--primary); font-size: 13px;">History</span>
+            <button class="btn-clear-all" onclick="clearHistory()">Delete</button>
+        </div>
+        <input type="text" id="searchHistory" class="search-box" placeholder="Cari Nama/NIK..." onkeyup="renderHistory()">
+        <div id="historyList"></div>
+    </div>
 </div>
 
 <script>
+    // --- LOGIKA FIREBASE ---
+    let isLogin = true;
+
+    function toggleAuth() {
+        isLogin = !isLogin;
+        document.getElementById('auth-title').innerText = isLogin ? "Masuk JMO Pro" : "Daftar Akun";
+        document.getElementById('main-auth-btn').innerText = isLogin ? "Login" : "Daftar";
+        document.getElementById('toggle-text').innerText = isLogin ? "Belum punya akun? Daftar gratis" : "Sudah punya akun? Login";
+    }
+
+    function handleAuth() {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('pass').value;
+        if(!email || !pass) return alert("Isi email dan password!");
+
+        if(isLogin) {
+            auth.signInWithEmailAndPassword(email, pass).catch(e => alert(e.message));
+        } else {
+            auth.createUserWithEmailAndPassword(email, pass).then(() => alert("Berhasil Daftar!")).catch(e => alert(e.message));
+        }
+    }
+
+    function logout() { auth.signOut(); }
+
+    auth.onAuthStateChanged(user => {
+        if(user) {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-content').style.display = 'flex';
+            document.getElementById('user-display').innerText = "User: " + user.email.split('@')[0];
+            renderHistory();
+        } else {
+            document.getElementById('auth-screen').style.display = 'block';
+            document.getElementById('main-content').style.display = 'none';
+        }
+    });
+
+    // --- KODE GENERATOR ASLI (TIDAK BERUBAH) ---
     let rawCache = { tg: "01", nama: "-", nik: "-" };
 
     function handleInput(el) {
         el.style.height = "auto";
         el.style.height = (el.scrollHeight) + "px";
-
         if (el.value.trim() === "") {
             document.getElementById('out1').innerText = "";
             document.getElementById('out2').innerText = "";
@@ -250,13 +328,11 @@
     function sendWA(id, directText = null) {
         let textToSend = directText || document.getElementById(id).innerText;
         if(!textToSend || textToSend.trim() === "") return;
-
         if (!directText) {
             const currentF1 = document.getElementById('out1').innerText;
             const currentF2 = document.getElementById('out2').innerText;
             saveHistory(rawCache.tg, rawCache.nama, rawCache.nik, currentF1, currentF2);
         }
-
         window.open(`https://wa.me/?text=${encodeURIComponent(textToSend)}`, '_blank');
     }
 
