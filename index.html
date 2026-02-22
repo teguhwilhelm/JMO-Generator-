@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JMO Generator Pro</title>
+    <title>Go-Generate Pro</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#007bff">
 
@@ -188,7 +188,7 @@
 <body>
 
 <div id="auth-screen">
-    <h2 id="auth-title">Login Generator Pro</h2>
+    <h2 id="auth-title">Login Generate Pro</h2>
     <input type="email" id="email" class="auth-input" placeholder="Email">
     <input type="password" id="pass" class="auth-input" placeholder="Password">
     <button class="auth-btn" id="main-auth-btn" onclick="handleAuth()">Login</button>
@@ -209,7 +209,7 @@
             <span class="openbtn" onclick="openNav()">☰</span>
             <h2 class="moving-title">
                 <span class="moving-emoji">⚒️</span> 
-                JMO Generator Pro 
+                Go-Generate Pro 
                 <span class="moving-emoji">⚒️</span>
             </h2>
         </div>
@@ -268,7 +268,7 @@
     let isLogin = true;
     function toggleAuth() {
         isLogin = !isLogin;
-        document.getElementById('auth-title').innerText = isLogin ? "Masuk JMO Pro" : "Daftar Akun";
+        document.getElementById('auth-title').innerText = isLogin ? "Login Go-Generate Pro" : "Daftar Akun";
         document.getElementById('main-auth-btn').innerText = isLogin ? "Login" : "Daftar";
         document.getElementById('toggle-text').innerText = isLogin ? "Belum punya akun? Daftar gratis" : "Sudah punya akun? Login";
     }
@@ -378,7 +378,7 @@
 
         let f1 = "";
         if (sel === "ori") {
-            f1 = `🦆 Swan TG ${noTG} 🦢\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikShort}\n${kpjShort}\n${nama}\n${thn}\nPT. -\n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${labelKartu}\n\nDPT ✅   JMO ✅`;
+            f1 = `🦆 TG ${noTG} 🦢\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikShort}\n${kpjShort}\n${nama}\n${thn}\nPT. -\n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${labelKartu}\n\nDPT ✅   JMO ✅`;
         } else if (sel === "1") {
             f1 = `💎 TG ${noTG} 💎 \n\n🏢 Kab : ${kab}\n🏬 Kec : ${kec}\n🏫 Kel : ${kel}\n🆔 NIK : ${nikShort}\n💳 KPJ : ${kpjShort}\n👫 Nama : ${nama}\n📆 Tanggal Lahir : ${thn}\n🏭 Company : \n\n💲Saldo Utama : Rp. ${lasik}\n💰Total Saldo : Rp. ${lasik}\n🔍Sensor : ${labelKartu}\n\n🎯 Terpercaya ✅ JMO`;
         } else if (sel === "2") {
@@ -391,7 +391,7 @@
             f1 = `🐦‍🔥 TG ${noTG} 🐦‍🔥\n\n👥 : ${nama}\n🪪 : ${nikShort}\n💳 : ${kpjShort}\n📆 : ${thn}\n🏭 : \n🏢 : ${kab}\n🏬 : ${kec}\n🏫 : ${kel}\n\n💲 : Rp. ${lasik}\n💰 : Rp. ${lasik}\n🔎 : ${labelKartu}\n\n🎯 Terpercaya ✅ JMO`;
         }
 
-        const f2 = `🦢🦆 TG ${noTG} 🦆🦢\n\nNama: ${nama}\nNIK: ${nik}\nNo. KPJ: ${kpj}\nEmail: \nPassword: Bebek123@ \n\n🖥 Admin OTP : 087778889609`;
+        const f2 = `🦢 TG ${noTG} 🦆\n\nNama: ${nama}\nNIK: ${nik}\nNo. KPJ: ${kpj}\nEmail: \nPassword: Bebek123@ \n\n🖥 Admin OTP : 087778889609`;
 
         document.getElementById('out1').innerText = f1;
         document.getElementById('out2').innerText = f2;
