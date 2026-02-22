@@ -1,9 +1,9 @@
 {
-  "short_name": "JMO Generator",
-  "name": "JMO Generator Pro",
+  "short_name": "Go-Generate Pro",
+  "name": "Go-Generate Pro",
   "icons": [
     {
-      "src": "1771178645186.png",
+      "src": "FullLogo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
