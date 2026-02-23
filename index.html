@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Go-Generate Pro</title>
     <link rel="icon" type="image/png" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#007bff">
 
@@ -47,104 +47,33 @@
 
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 10px; display: flex; flex-direction: column; align-items: center; margin: 0; }
         
-        /* --- ANIMASI JUDUL --- */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-            100% { transform: translateY(0px); }
-        }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); } }
+        @keyframes shake { 0% { transform: rotate(0deg); } 25% { transform: rotate(10deg); } 50% { transform: rotate(0deg); } 75% { transform: rotate(-10deg); } 100% { transform: rotate(0deg); } }
 
-        @keyframes shake {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(10deg); }
-            50% { transform: rotate(0deg); }
-            75% { transform: rotate(-10deg); }
-            100% { transform: rotate(0deg); }
-        }
-
-        .moving-title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            animation: float 3s ease-in-out infinite;
-            color: var(--primary);
-            text-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
-        }
-
-        .moving-emoji {
-            display: inline-block;
-            animation: shake 1.5s ease-in-out infinite;
-        }
-        /* -------------------- */
+        .moving-title { display: flex; align-items: center; justify-content: center; gap: 10px; animation: float 3s ease-in-out infinite; color: var(--primary); text-shadow: 0 0 10px rgba(0, 123, 255, 0.2); }
+        .moving-emoji { display: inline-block; animation: shake 1.5s ease-in-out infinite; }
 
         #auth-screen { width: 100%; max-width: 400px; margin-top: 60px; background: var(--card); padding: 30px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
         .auth-input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box; background: var(--bg); color: var(--text); outline: none; }
         .auth-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: var(--primary); color: white; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .auth-link { margin-top: 15px; font-size: 13px; color: var(--primary); cursor: pointer; }
 
-        .sidebar {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 2001;
-            top: 0;
-            left: 0;
-            background-color: var(--card);
-            overflow-x: hidden;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 4px 0 10px rgba(0,0,0,0.2);
-            padding-top: 40px;
-        }
+        .sidebar { height: 100%; width: 0; position: fixed; z-index: 2001; top: 0; left: 0; background-color: var(--card); overflow-x: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 4px 0 10px rgba(0,0,0,0.2); padding-top: 40px; }
         .sidebar-content { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         .sidebar-user-info { font-size: 14px; font-weight: bold; color: var(--primary); border-bottom: 1px solid #ddd; padding-bottom: 15px; }
         .btn-off-side { background: #ff4757; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; }
         
-        .overlay-bg {
-            display: none;
-            position: fixed;
-            width: 100%; height: 100%;
-            top: 0; left: 0;
-            background: rgba(0,0,0,0.3);
-            z-index: 2000;
-            backdrop-filter: blur(1.5px);
-        }
+        .overlay-bg { display: none; position: fixed; width: 100%; height: 100%; top: 0; left: 0; background: rgba(0,0,0,0.3); z-index: 2000; backdrop-filter: blur(1.5px); }
 
-        .header-row {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            border-bottom: 2px solid var(--primary);
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-        }
-
-        .openbtn { 
-            font-size: 24px; 
-            cursor: pointer; 
-            color: var(--primary); 
-            padding-right: 15px; 
-            user-select: none;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+        .header-row { display: flex; align-items: center; width: 100%; border-bottom: 2px solid var(--primary); margin-bottom: 15px; padding-bottom: 8px; }
+        .openbtn { font-size: 24px; cursor: pointer; color: var(--primary); padding-right: 15px; outline: none; -webkit-tap-highlight-color: transparent; }
         
-        .container, .history-wrapper { 
-            background: var(--card); 
-            width: 100%; 
-            max-width: 450px; 
-            border-radius: 20px; 
-            padding: 20px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
-            box-sizing: border-box; 
-        }
-
+        .container, .history-wrapper { background: var(--card); width: 100%; max-width: 450px; border-radius: 20px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); box-sizing: border-box; }
         .container { margin-top: 10px; margin-bottom: 20px; }
-
-        h2 { flex-grow: 1; text-align: center; margin: 0; font-size: 1.1rem; padding-right: 39px; border-bottom: none; } 
+        h2 { flex-grow: 1; text-align: center; margin: 0; font-size: 1.1rem; padding-right: 39px; } 
         
-        .sync-field { margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 13px; }
-        .sync-field input { padding: 5px; border-radius: 6px; border: 2px solid #ddd; width: 35px; text-align: center; background: var(--card); color: var(--primary); font-weight: bold; outline: none; font-size: 12px; }
+        .sync-field { margin-bottom: 15px; display: flex; align-items: center; gap: 5px; font-weight: bold; font-size: 12px; }
+        .sync-field input { padding: 4px 8px; border-radius: 6px; border: 1.5px solid #ddd; width: 80px; text-align: center; background: var(--card); color: var(--primary); font-weight: bold; outline: none; font-size: 11px; }
 
         .template-select { padding: 3px 5px; border-radius: 6px; border: 1px solid #ddd; font-size: 10px; background: var(--card); color: var(--primary); font-weight: bold; outline: none; cursor: pointer; margin-right: auto; margin-left: 10px; max-width: 110px; }
 
@@ -164,20 +93,20 @@
         .history-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .search-box { width: 55%; padding: 6px 12px; border-radius: 15px; border: 1px solid #ccc; font-size: 11px; outline: none; margin-bottom: 15px; }
         
-        .history-scroll-area {
-            max-height: 320px; 
-            overflow-y: auto;
-            padding-right: 5px;
-        }
+        .history-scroll-area { max-height: 320px; overflow-y: auto; padding-right: 5px; }
         .history-scroll-area::-webkit-scrollbar { width: 4px; }
         .history-scroll-area::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
 
-        .history-item { background: var(--card); border: 1px solid #ddd; border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
-        .history-item-header { background: #f8f9fa; padding: 10px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
-        
-        @media (prefers-color-scheme: dark) {
-            .history-item-header { background: #2d2d2d; border-bottom: 1px solid #444; }
+        .history-item { 
+            background: var(--card); border: 1px solid #ddd; border-radius: 10px; margin-bottom: 8px; overflow: hidden; position: relative; 
+            user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; 
         }
+        .history-item-header { 
+            background: #f8f9fa; padding: 10px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; font-size: 12px; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        @media (prefers-color-scheme: dark) { .history-item-header { background: #2d2d2d; border-bottom: 1px solid #444; } }
 
         .history-content { display: none; padding: 10px; font-size: 12px; border-top: 1px solid #eee; }
         .history-content pre { background: #f9f9f9; padding: 8px; border-radius: 5px; white-space: pre-wrap; margin: 8px 0; border: 1px solid #eee; font-size: 10px; color: #555; max-height: 120px; overflow-y: auto; }
@@ -185,6 +114,10 @@
         .btn-clear-all { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 10px; cursor: pointer; }
         .badge-tg { background: var(--primary); color: white; padding: 2px 5px; border-radius: 4px; font-size: 10px; margin-right: 5px; }
         .time-ago { font-size: 9px; color: #999; font-weight: normal; }
+
+        /* CSS KHUSUS SELEKSI */
+        .select-mode-check { display: none; margin-right: 10px; width: 16px; height: 16px; accent-color: var(--primary); pointer-events: none; }
+        .history-item.selecting .select-mode-check { display: inline-block; }
     </style>
 </head>
 <body>
@@ -217,8 +150,8 @@
         </div>
 
         <div class="sync-field">
-            <span>Kode (TG):</span>
-            <input type="text" id="noTG" value="01">
+            <span>Label :</span>
+            <input type="text" id="noTG" placeholder="Judul/Kode">
         </div>
         <textarea id="inputData" placeholder="Tempel Bahan di sini..." oninput="handleInput(this)"></textarea>
         <button id="genBtn" class="btn-gen" onclick="generate()">Generate ✨</button>
@@ -247,8 +180,8 @@
 
     <div class="history-wrapper">
         <div class="history-header-top">
-            <span style="font-weight:bold; color:var(--primary); font-size: 13px;">History</span>
-            <button class="btn-clear-all" onclick="clearHistory()">Delete</button>
+            <span id="history-label" style="font-weight:bold; color:var(--primary); font-size: 13px;">History</span>
+            <button class="btn-clear-all" id="btn-del-main" onclick="handleMainDelete()">Delete</button>
         </div>
         <input type="text" id="searchHistory" class="search-box" placeholder="Cari Nama/NIK..." onkeyup="renderHistory()">
         
@@ -259,14 +192,9 @@
 </div>
 
 <script>
-    function openNav() {
-        document.getElementById("mySidebar").style.width = "250px";
-        document.getElementById("sideOverlay").style.display = "block";
-    }
-    function closeNav() {
-        document.getElementById("mySidebar").style.width = "0";
-        document.getElementById("sideOverlay").style.display = "none";
-    }
+    function openNav() { document.getElementById("mySidebar").style.width = "250px"; document.getElementById("sideOverlay").style.display = "block"; }
+    function closeNav() { document.getElementById("mySidebar").style.width = "0"; document.getElementById("sideOverlay").style.display = "none"; }
+    
     let isLogin = true;
     function toggleAuth() {
         isLogin = !isLogin;
@@ -295,15 +223,15 @@
         }
     });
 
-    let rawCache = { tg: "01", nama: "-", nik: "-" };
+    let rawCache = { tg: "", nama: "-", nik: "-" };
+    let selectedNIKs = []; 
+    let pressTimer;
 
     function handleInput(el) {
-        el.style.height = "auto";
-        el.style.height = (el.scrollHeight) + "px";
+        el.style.height = "auto"; el.style.height = (el.scrollHeight) + "px";
         if (el.value.trim() === "") {
-            document.getElementById('out1').innerText = "";
-            document.getElementById('out2').innerText = "";
-            rawCache = { tg: "01", nama: "-", nik: "-" };
+            document.getElementById('out1').innerText = ""; document.getElementById('out2').innerText = "";
+            rawCache = { tg: "", nama: "-", nik: "-" };
         }
     }
 
@@ -316,111 +244,81 @@
     function timeAgo(date) {
         const seconds = Math.floor((new Date() - new Date(date)) / 1000);
         if (seconds < 60) return "Baru saja";
-        const minutes = Math.floor(seconds / 60);
-        if (minutes < 60) return minutes + "m";
-        const hours = Math.floor(minutes / 60);
-        if (hours < 24) return hours + "j";
+        const minutes = Math.floor(seconds / 60); if (minutes < 60) return minutes + "m";
+        const hours = Math.floor(minutes / 60); if (hours < 24) return hours + "j";
         return Math.floor(hours / 24) + "hr";
     }
 
     function generate() {
         const input = document.getElementById('inputData').value;
-        const noTG = document.getElementById('noTG').value || "01";
+        const noTG = document.getElementById('noTG').value;
         const sel = document.getElementById('selTemp').value;
         const btn = document.getElementById('genBtn');
-
         if (!input.trim()) return;
 
         let nama = "-", nik = "-", kpj = "-", thn = "-", kab = "-", kec = "-", kel = "-", lasik = "0", kartuRaw = "";
         const lines = input.split('\n');
-        
         lines.forEach((line, index) => {
             let uLine = line.toUpperCase().trim();
             let content = line.includes(":") ? line.split(":")[1].trim() : line.trim();
 
-            if (uLine.includes("NIK")) {
-                nik = content.replace(/\D/g, "");
-            } else if (line.trim().match(/^\d{16}$/)) {
-                nik = line.trim();
-            }
+            if (uLine.includes("NIK")) { nik = content.replace(/\D/g, ""); } 
+            else if (line.trim().match(/^\d{16}$/)) { nik = line.trim(); }
 
-            if (uLine.includes("KPJ")) {
-                kpj = content;
-            } else if (line.trim().match(/^[A-Z0-9]{11}$/i)) {
-                kpj = line.trim();
-                if (nama === "-" && lines[index+1] && !lines[index+1].includes(":")) {
-                    nama = lines[index+1].trim();
-                }
+            if (uLine.includes("KPJ")) { kpj = content; } 
+            else if (line.trim().match(/^[A-Z0-9]{11}$/i)) { 
+                kpj = line.trim(); 
+                if (nama === "-" && lines[index+1] && !lines[index+1].includes(":")) { nama = lines[index+1].trim(); }
             }
 
             if (uLine.startsWith("NAMA")) nama = content;
             if (uLine.includes("KABUPATEN") || uLine.includes("KOTA")) kab = content;
             if (uLine.includes("KECAMATAN")) kec = content;
             if (uLine.includes("KELURAHAN")) kel = content;
-
-            if (uLine.includes("TTL") || uLine.includes("LAKI-LAKI") || uLine.includes("PEREMPUAN")) {
-                let match = line.match(/\d{4}/);
-                if (match) thn = match[0];
-            }
-
-            if (uLine.includes("SALDO JHT") || uLine.includes("SALDO LASIK") || uLine.includes("TOTAL SALDO")) {
-                lasik = formatTitik(content);
-            }
-
-            if (uLine.includes("JUMLAH KARTU")) {
-                kartuRaw = content.replace(/\D/g, "");
-            }
+            if (uLine.includes("TTL") || uLine.includes("LAKI-LAKI") || uLine.includes("PEREMPUAN")) { let match = line.match(/\d{4}/); if (match) thn = match[0]; }
+            if (uLine.includes("SALDO JHT") || uLine.includes("SALDO LASIK") || uLine.includes("TOTAL SALDO")) { lasik = formatTitik(content); }
+            if (uLine.includes("JUMLAH KARTU")) { kartuRaw = content.replace(/\D/g, ""); }
         });
 
         let nikShort = (nik !== "-" && nik.length >= 4) ? nik.substring(0, 4) : nik;
         let kpjShort = (kpj !== "-" && kpj.length >= 4) ? kpj.substring(0, 4).toUpperCase() : kpj;
         let labelKartu = (kartuRaw !== "" && parseInt(kartuRaw) > 0) ? "SENSOR" : "TUNGGAL";
-
         rawCache = { tg: noTG, nama, nik };
 
         let f1 = "";
         if (sel === "ori") {
-            f1 = `🦆 TG ${noTG} 🦢\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikShort}\n${kpjShort}\n${nama}\n${thn}\nPT. -\n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${labelKartu}\n\nDPT ✅   JMO ✅`;
+            f1 = `🦆 ${noTG} 🦢\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikShort}\n${kpjShort}\n${nama}\n${thn}\nPT. -\n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${labelKartu}\n\nDPT ✅   JMO ✅`;
         } else if (sel === "1") {
-            f1 = `💎 TG ${noTG} 💎 \n\n🏢 Kab : ${kab}\n🏬 Kec : ${kec}\n🏫 Kel : ${kel}\n🆔 NIK : ${nikShort}\n💳 KPJ : ${kpjShort}\n👫 Nama : ${nama}\n📆 Tanggal Lahir : ${thn}\n🏭 Company : \n\n💲Saldo Utama : Rp. ${lasik}\n💰Total Saldo : Rp. ${lasik}\n🔍Sensor : ${labelKartu}\n\n🎯 Terpercaya ✅ JMO`;
+            f1 = `💎 ${noTG} 💎 \n\n🏢 Kab : ${kab}\n🏬 Kec : ${kec}\n🏫 Kel : ${kel}\n🆔 NIK : ${nikShort}\n💳 KPJ : ${kpjShort}\n👫 Nama : ${nama}\n📆 Tanggal Lahir : ${thn}\n🏭 Company : \n\n💲Saldo Utama : Rp. ${lasik}\n💰Total Saldo : Rp. ${lasik}\n🔍Sensor : ${labelKartu}\n\n🎯 Terpercaya ✅ JMO`;
         } else if (sel === "2") {
-            f1 = `✨ TG ${noTG} ✨ \n\nNIK : ${nikShort}\nKPJ : ${kpjShort}\nNama : ${nama}\nTanggal Lahir : ${thn}\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\nCompany : \nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nSensor : ${labelKartu}\n\n🎯 Terpercaya ✅ JMO`;
+            f1 = `✨ ${noTG} ✨ \n\nNIK : ${nikShort}\nKPJ : ${kpjShort}\nNama : ${nama}\nTanggal Lahir : ${thn}\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\nCompany : \nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nSensor : ${labelKartu}\n\n🎯 Terpercaya ✅ JMO`;
         } else if (sel === "3") {
-            f1 = `🪽 TG ${noTG} 🪽 \n\n📝\n★Nama : ${nama}\n★NIK : ${nikShort}\n★KPJ : ${kpjShort}\n★Tanggal Lahir : ${thn}\n★Company : \n💸\n★Saldo Utama : Rp. ${lasik}\n★Total Saldo : Rp. ${lasik}\n★Jenis Kartu : ${labelKartu}\n🏘️\n★Kab : ${kab}\n★Kec : ${kec}\n★Kel : ${kel}\n\n🎯 Terpercaya ✅ JMO`;
+            f1 = `🪽 ${noTG} 🪽 \n\n📝\n★Nama : ${nama}\n★NIK : ${nikShort}\n★KPJ : ${kpjShort}\n★Tanggal Lahir : ${thn}\n★Company : \n💸\n★Saldo Utama : Rp. ${lasik}\n★Total Saldo : Rp. ${lasik}\n★Jenis Kartu : ${labelKartu}\n🏘️\n★Kab : ${kab}\n★Kec : ${kec}\n★Kel : ${kel}\n\n🎯 Terpercaya ✅ JMO`;
         } else if (sel === "4") {
-            f1 = `🦚 TG ${noTG} 🦚\n\n* Kabupaten : ${kab}\n* Kecamatan : ${kec}\n* Kelurahan : ${kel}\n\n* NIK : ${nikShort}\n* KPJ : ${kpjShort}\n* Nama : ${nama}\n* Tanggal Lahir : ${thn}\n* Company : \n\n* Saldo Utama : Rp. ${lasik}\n* Total Saldo : Rp. ${lasik}\n* Sensor : ${labelKartu}\n\n🎯 Terpercaya ✅ JMO`;
+            f1 = `🦚 ${noTG} 🦚\n\n* Kabupaten : ${kab}\n* Kecamatan : ${kec}\n* Kelurahan : ${kel}\n\n* NIK : ${nikShort}\n* KPJ : ${kpjShort}\n* Nama : ${nama}\n* Tanggal Lahir : ${thn}\n* Company : \n\n* Saldo Utama : Rp. ${lasik}\n* Total Saldo : Rp. ${lasik}\n* Sensor : ${labelKartu}\n\n🎯 Terpercaya ✅ JMO`;
         } else if (sel === "5") {
-            f1 = `🐦‍🔥 TG ${noTG} 🐦‍🔥\n\n👥 : ${nama}\n🪪 : ${nikShort}\n💳 : ${kpjShort}\n📆 : ${thn}\n🏭 : \n🏢 : ${kab}\n🏬 : ${kec}\n🏫 : ${kel}\n\n💲 : Rp. ${lasik}\n💰 : Rp. ${lasik}\n🔎 : ${labelKartu}\n\n🎯 Terpercaya ✅ JMO`;
+            f1 = `🐦‍🔥 ${noTG} 🐦‍🔥\n\n👥 : ${nama}\n🪪 : ${nikShort}\n💳 : ${kpjShort}\n📆 : ${thn}\n🏭 : \n🏢 : ${kab}\n🏬 : ${kec}\n🏫 : ${kel}\n\n💲 : Rp. ${lasik}\n💰 : Rp. ${lasik}\n🔎 : ${labelKartu}\n\n🎯 Terpercaya ✅ JMO`;
         }
 
-        const f2 = `🦢 TG ${noTG} 🦆\n\nNama: ${nama}\nNIK: ${nik}\nNo. KPJ: ${kpj}\nEmail: \nPassword: Bebek123@ \n\n🖥 Admin OTP : 087778889609`;
+        const f2 = `🦢 ${noTG} 🦆\n\nNama: ${nama}\nNIK: ${nik}\nNo. KPJ: ${kpj}\nEmail: \nPassword: Bebek123@ \n\n🖥 Admin OTP : 087778889609`;
 
         document.getElementById('out1').innerText = f1;
         document.getElementById('out2').innerText = f2;
-
-        btn.style.background = "#28a745";
-        btn.innerHTML = "Success! ✨";
+        btn.style.background = "#28a745"; btn.innerHTML = "Success! ✨";
         setTimeout(() => { btn.style.background = "var(--primary)"; btn.innerHTML = "Generate ✨"; }, 1000);
     }
 
     function sendWA(id, directText = null) {
         let textToSend = directText || document.getElementById(id).innerText;
         if(!textToSend || textToSend.trim() === "") return;
-        if (!directText) {
-            const currentF1 = document.getElementById('out1').innerText;
-            const currentF2 = document.getElementById('out2').innerText;
-            saveHistory(rawCache.tg, rawCache.nama, rawCache.nik, currentF1, currentF2);
-        }
+        if (!directText) { saveHistory(rawCache.tg, rawCache.nama, rawCache.nik, document.getElementById('out1').innerText, document.getElementById('out2').innerText); }
         window.open(`https://wa.me/?text=${encodeURIComponent(textToSend)}`, '_blank');
     }
 
     function saveHistory(tg, nama, nik, f1, f2) {
         let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
-        if (history.length > 0 && history[0].nik === nik) {
-            history[0] = {tg, nama, nik, f1, f2, timestamp: new Date().getTime()};
-        } else {
-            history.unshift({tg, nama, nik, f1, f2, timestamp: new Date().getTime()});
-        }
+        if (history.length > 0 && history[0].nik === nik) { history[0] = {tg, nama, nik, f1, f2, timestamp: new Date().getTime()}; } 
+        else { history.unshift({tg, nama, nik, f1, f2, timestamp: new Date().getTime()}); }
         localStorage.setItem('jmo_history', JSON.stringify(history.slice(0, 50)));
         renderHistory();
     }
@@ -430,29 +328,85 @@
         const searchTerm = document.getElementById('searchHistory').value.toLowerCase();
         let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
         let filtered = history.filter(item => (item.nama && item.nama.toLowerCase().includes(searchTerm)) || (item.nik && item.nik.includes(searchTerm)));
+        
         if (filtered.length === 0) { list.innerHTML = "<p style='text-align:center; color:#888; font-size:12px;'>Kosong.</p>"; return; }
-        list.innerHTML = filtered.map((item, index) => `
-            <div class="history-item">
-                <div class="history-item-header" onclick="toggleHistory(${index})">
-                    <span><span class="badge-tg">TG ${item.tg}</span> ${item.nama.substring(0, 15)}</span>
+        
+        list.innerHTML = filtered.map((item, index) => {
+            const isSelected = selectedNIKs.includes(item.nik);
+            return `
+            <div class="history-item ${selectedNIKs.length > 0 ? 'selecting' : ''}" 
+                 onmousedown="startPress('${item.nik}')" 
+                 onmouseup="endPress()" 
+                 onmouseleave="endPress()"
+                 ontouchstart="startPress('${item.nik}')" 
+                 ontouchend="endPress()">
+                <div class="history-item-header" onclick="handleItemClick('${item.nik}', ${index})">
+                    <div style="display:flex; align-items:center; flex-grow:1; pointer-events: none;">
+                        <input type="checkbox" class="select-mode-check" ${isSelected ? 'checked' : ''}>
+                        <span class="badge-tg">${item.tg}</span> 
+                        <span>${item.nama.substring(0, 15)}</span>
+                    </div>
                     <span class="time-ago">${timeAgo(item.timestamp)} ▼</span>
                 </div>
                 <div id="his-content-${index}" class="history-content">
-                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f1.replace(/`/g, '\\`').replace(/\n/g, '\\n').replace(/\r/g, '')}\`)">Resend Format 1 🟢</button>
-                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f2.replace(/`/g, '\\`').replace(/\n/g, '\\n').replace(/\r/g, '')}\`)">Resend Format 2 🟢</button>
+                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f1.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`)">Resend Format 1 🟢</button>
+                    <button class="btn-wa-small" onclick="sendWA(null, \`${item.f2.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`)">Resend Format 2 🟢</button>
                     <pre>${item.f1}</pre>
                     <pre style="background: #fdfdfd; color: #333; border: 1px solid #ddd;">${item.f2}</pre>
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+        }).join('');
+        updateDeleteButton();
+    }
+
+    function startPress(nik) {
+        pressTimer = window.setTimeout(function() { 
+            if (!selectedNIKs.includes(nik)) { selectedNIKs.push(nik); renderHistory(); }
+        }, 700);
+    }
+    
+    function endPress() { clearTimeout(pressTimer); }
+
+    function handleItemClick(nik, index) {
+        if (selectedNIKs.length > 0) {
+            if (selectedNIKs.includes(nik)) { selectedNIKs = selectedNIKs.filter(id => id !== nik); } 
+            else { selectedNIKs.push(nik); }
+            renderHistory();
+        } else { toggleHistory(index); }
+    }
+
+    function updateDeleteButton() {
+        const btn = document.getElementById('btn-del-main');
+        const label = document.getElementById('history-label');
+        if (selectedNIKs.length > 0) {
+            btn.innerText = `Delete (${selectedNIKs.length})`;
+            btn.style.background = "#ff1f1f";
+            label.innerText = "Selecting...";
+        } else {
+            btn.innerText = "Delete";
+            btn.style.background = "#ff4d4d";
+            label.innerText = "History";
+        }
+    }
+
+    function handleMainDelete() {
+        if (selectedNIKs.length > 0) {
+            if(confirm(`Hapus ${selectedNIKs.length} data terpilih?`)) {
+                let history = JSON.parse(localStorage.getItem('jmo_history') || "[]");
+                let updated = history.filter(item => !selectedNIKs.includes(item.nik));
+                localStorage.setItem('jmo_history', JSON.stringify(updated));
+                selectedNIKs = [];
+                renderHistory();
+            }
+        } else {
+            if(confirm("Hapus semua riwayat?")) { localStorage.removeItem('jmo_history'); renderHistory(); }
+        }
     }
 
     function toggleHistory(index) {
         const content = document.getElementById(`his-content-${index}`);
-        content.style.display = content.style.display === 'block' ? 'none' : 'block';
+        if(content) { content.style.display = content.style.display === 'block' ? 'none' : 'block'; }
     }
-
-    function clearHistory() { if(confirm("Hapus semua riwayat?")) { localStorage.removeItem('jmo_history'); renderHistory(); } }
 
     renderHistory();
     setInterval(renderHistory, 60000);
