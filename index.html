@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#7209b7">
+    <meta name="theme-color" content="#0f172a">
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -44,7 +44,7 @@
         }
 
         :root { 
-            --bg: #0a0a0c;
+            --bg: #0f172a;
             --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.1);
             --accent-1: #b5179e; 
@@ -56,7 +56,7 @@
 
         body { 
             font-family: 'Rajdhani', sans-serif; 
-            background: radial-gradient(circle at top right, #1a1a2e, #0a0a0c);
+            background: var(--bg);
             color: var(--text-main); 
             padding: 10px; 
             display: flex; 
