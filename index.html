@@ -71,40 +71,11 @@
             50% { box-shadow: 0 0 15px var(--accent-1); }
             100% { box-shadow: 0 0 5px var(--accent-1); }
         }
-@keyframes titleFloat {
-    0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
-    50% { transform: translateY(-5px) scale(1.02); filter: brightness(1.3); }
-}
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
+            50% { transform: translateY(-5px) scale(1.02); filter: brightness(1.3); }
+        }
 
-.moving-title { 
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    background: linear-gradient(to right, var(--neon-cyan), var(--accent-1));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    animation: titleFloat 3s ease-in-out infinite;
-}
-.auth-btn:active {
-    transform: scale(0.95);
-    filter: brightness(1.2);
-    box-shadow: 0 0 25px var(--accent-1);
-    transition: 0.1s;
-}
-.auth-btn {
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-.auth-btn:hover {
-    letter-spacing: 1px;
-    box-shadow: 0 0 20px var(--accent-2);
-}
         .moving-title { 
             font-family: 'Orbitron', sans-serif;
             text-transform: uppercase;
@@ -117,6 +88,32 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+        .auth-btn:active {
+            transform: scale(0.95);
+            filter: brightness(1.2);
+            box-shadow: 0 0 25px var(--accent-1);
+            transition: 0.1s;
+        }
+        .auth-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            width: 100%; 
+            padding: 15px; 
+            border: none; 
+            border-radius: 12px; 
+            background: linear-gradient(45deg, var(--accent-2), var(--accent-1));
+            color: white; 
+            font-weight: bold; 
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(181, 23, 158, 0.3);
+        }
+        .auth-btn:hover {
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px var(--accent-2);
         }
 
         #auth-screen { 
@@ -142,18 +139,6 @@
             outline: none; 
             box-sizing: border-box;
         }
-        .auth-btn { 
-            width: 100%; 
-            padding: 15px; 
-            border: none; 
-            border-radius: 12px; 
-            background: linear-gradient(45deg, var(--accent-2), var(--accent-1));
-            color: white; 
-            font-weight: bold; 
-            cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(181, 23, 158, 0.3);
-        }
         .auth-link { margin-top: 15px; font-size: 13px; color: var(--neon-cyan); cursor: pointer; }
 
         .sidebar { 
@@ -167,7 +152,6 @@
         
         .overlay-bg { display: none; position: fixed; width: 100%; height: 100%; top: 0; left: 0; background: rgba(0,0,0,0.6); z-index: 2000; backdrop-filter: blur(3px); }
 
-        /* Main Container */
         .header-row { display: flex; align-items: center; width: 100%; border-bottom: 1px solid var(--neon-cyan); margin-bottom: 20px; padding-bottom: 10px; }
         .openbtn { font-size: 24px; cursor: pointer; color: var(--neon-cyan); padding-right: 15px; user-select: none; }
         
@@ -185,7 +169,6 @@
         h2 { flex-grow: 1; text-align: center; margin: 0; font-size: 1.1rem; } 
         
         .sync-field { margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 12px; color: var(--neon-cyan); }
-        
         .sync-field input { 
             padding: 6px; border-radius: 8px; border: 1px solid var(--glass-border); 
             width: 70px; text-align: center; background: rgba(0,0,0,0.3); 
@@ -336,15 +319,40 @@
     }
     function logout() { closeNav(); auth.signOut(); }
 
+    // --- FITUR AUTO LOGOUT & TAB CLOSED ---
+    let idleTimer;
+    const INACTIVITY_LIMIT = 30 * 60 * 1000; // 30 Menit
+
+    function resetIdleTimer() {
+        clearTimeout(idleTimer);
+        if (auth.currentUser) {
+            idleTimer = setTimeout(() => {
+                alert("Sesi berakhir karena tidak ada aktivitas.");
+                logout();
+            }, INACTIVITY_LIMIT);
+        }
+    }
+
+    ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(evt => {
+        window.addEventListener(evt, resetIdleTimer, true);
+    });
+
+    window.addEventListener('beforeunload', () => {
+        auth.signOut();
+    });
+    // --------------------------------------
+
     auth.onAuthStateChanged(user => {
         if(user) {
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('main-content').style.display = 'flex';
             document.getElementById('user-display-side').innerText =  user.email.split('@')[0].toUpperCase();
             renderHistory();
+            resetIdleTimer();
         } else {
             document.getElementById('auth-screen').style.display = 'block';
             document.getElementById('main-content').style.display = 'none';
+            clearTimeout(idleTimer);
         }
     });
 
@@ -412,7 +420,7 @@
 
         let f1 = "";
         if (sel === "ori") {
-            f1 = `🦆 ${noTG} 🦢\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikShort}\n${kpjShort}\n${nama}\n${thn}\nPT. \n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${labelKartu}\n\nDPT ✅   JMO ✅`;
+            f1 = `🦆 ${noTG} 🦢\n\nKabupaten : ${kab}\nKecamatan : ${kec}\nKelurahan : ${kel}\n\n${nikShort}\n${kpjShort}\n${nama}\n${thn}\nPT. \n\nSaldo JHT : Rp. ${lasik}\nTotal Saldo : Rp. ${lasik}\nJumlah Kartu : ${labelKartu}\n\nDPT ✅ JMO ✅`;
         } else if (sel === "1") {
             f1 = `💎 ${noTG} 💎 \n\n🏢 Kab : ${kab}\n🏬 Kec : ${kec}\n🏫 Kel : ${kel}\n🆔 NIK : ${nikShort}\n💳 KPJ : ${kpjShort}\n👫 Nama : ${nama}\n📆 Tanggal Lahir : ${thn}\n🏭 Company : \n\n💲Saldo Utama : Rp. ${lasik}\n💰Total Saldo : Rp. ${lasik}\n🔍Sensor : ${labelKartu}\n\n🎯 Terpercaya ✅ JMO`;
         } else if (sel === "2") {
